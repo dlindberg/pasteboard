@@ -13,23 +13,24 @@ class PasteboardTest extends TestCase
         $this->current = Pasteboard::get();
     }
 
-    public function testCopy()
+    public function testSet()
     {
         $this->assertTrue(Pasteboard::set("Some Value"));
     }
 
-    public function testPaste()
+    public function testGet()
     {
+        Pasteboard::set("some value");
         $this->assertTrue(mb_strlen(Pasteboard::get()) > 0);
     }
 
-    public function testEmptyPaste()
+    public function testEmptyGet()
     {
         Pasteboard::set(null);
         $this->assertFalse(Pasteboard::get());
     }
 
-    public function testRoundTrip()
+    public function testSetToGet()
     {
         Pasteboard::set($this->string);
         $this->assertEquals($this->string, Pasteboard::get());
