@@ -27,7 +27,6 @@ class Pasteboard
         }
 
         return $r;
-
     }
 
     public static function get()
@@ -54,7 +53,6 @@ class Pasteboard
         }
 
         return false;
-
     }
 
     public static function setArray($array, $options = array())
@@ -72,13 +70,13 @@ class Pasteboard
         if (isset($options['heartbeat'])) {
             $heartbeat = $options['heartbeat'];
         } else {
-            $heartbeat = function ($result) use ($wait)
-            {
+            $heartbeat = function ($result) use ($wait) {
                 $r = false;
                 if ($result) {
                     sleep($wait);
                     $r = true;
                 }
+
                 return $r;
             };
         }
@@ -103,5 +101,4 @@ class Pasteboard
 
         return true;
     }
-
 }

@@ -20,7 +20,6 @@ before_install:
 
 env:
   - COMPOSER_OPTS=""
-  - COMPOSER_OPTS="--prefer-lowest"
 
 install:
     - travis_retry composer update --prefer-dist $COMPOSER_OPTS
@@ -34,8 +33,6 @@ script:
   - vendor/bin/phpunit --coverage-text --coverage-clover=coverage.clover
 
 after_script:
-  - |
-    if [[ "$TRAVIS_PHP_VERSION" != 'hhvm' && "$TRAVIS_PHP_VERSION" != '7.0' ]]; then
-      wget https://scrutinizer-ci.com/ocular.phar
-      php ocular.phar code-coverage:upload --format=php-clover coverage.clover
-    fi
+  - wget https://scrutinizer-ci.com/ocular.phar
+  - php ocular.phar code-coverage:upload --format=php-clover coverage.clover
+
