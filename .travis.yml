@@ -15,6 +15,7 @@ before_install:
 - brew upgrade
 - brew install git-lfs
 - brew install homebrew/php/php71
+- brew install homebrew/php/php71-xdebug
 - brew install composer
 
 
