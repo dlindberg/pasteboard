@@ -8,11 +8,12 @@ os: osx
 osx_image: xcode9.3beta
 
 before_install:
+- sudo chmod -R 770 /usr/local/sbin
 - brew update
 - brew outdated
 - brew upgrade
 - brew install git-lfs
-- sudo brew install homebrew/php/php71
+- brew install homebrew/php/php71
 - brew install composer
 
 
