@@ -1,5 +1,5 @@
 {
-    "name": "Dlindberg/Pasteboard",
+    "name": "dlindberg/pasteboard",
     "type": "library",
     "description": "Very basic MacOS pasteboard interface",
     "keywords": [
