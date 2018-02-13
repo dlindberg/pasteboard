@@ -1,7 +1,7 @@
 
 # This triggers builds to run on the new TravisCI infrastructure.
 # See: http://docs.travis-ci.com/user/workers/container-based-infrastructure/
-sudo: false
+sudo: true
 
 ## requires mac os pbcopy and pbpaste commands.
 os: osx
@@ -12,7 +12,7 @@ before_install:
 - brew outdated
 - brew upgrade
 - brew install git-lfs
-- brew install homebrew/php/php71
+- sudo brew install homebrew/php/php71
 - brew install composer
 
 
