@@ -8,8 +8,8 @@ os: osx
 osx_image: xcode9.3beta
 
 before_install:
-- mkdir /usr/local/sbin
-- ls /usr/local
+- sudo mkdir /usr/local/sbin
+- sudo chown -R travis /usr/local/sbin
 - brew update
 - brew outdated
 - brew upgrade
