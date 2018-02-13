@@ -12,6 +12,9 @@ php:
 # See: http://docs.travis-ci.com/user/workers/container-based-infrastructure/
 sudo: false
 
+## requires mac os pbcopy and pbpaste commands.
+os: osx
+
 ## Cache composer
 cache:
   directories:
