@@ -23,7 +23,7 @@ $ composer require Dlindberg/Pasteboard
 
 Pasteboard has three methods:
 
-### get()
+### Get
 
 Retrieves a value from the clipboard.
 
@@ -37,7 +37,7 @@ Pasteboard::get();
 
 ***Note:*** no filters or santization is applied to the return value and it is prudent to treat the value as unsafe user input for the purposes of your application.
 
-### set()
+### Set
 
 Copies a value to the clipboard.
 
@@ -49,7 +49,7 @@ Pasteboard::set(string $value);
 
 ***Returns:*** `true` on success or `false` on failure. 
 
-### setArray()
+### Set Array
 
 Sends an array of values one at a time to the clipboard pausing between each send. The function also has some advanced options defined in the $options array.
 

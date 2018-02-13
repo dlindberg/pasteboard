@@ -15,6 +15,12 @@ sudo: false
 ## requires mac os pbcopy and pbpaste commands.
 os: osx
 
+os: osx
+
+before_install:
+- brew install git-lfs
+- brew install ${TRAVIS_PHP_VERSION}
+
 
 env:
   - COMPOSER_OPTS=""
@@ -26,6 +32,7 @@ install:
   - travis_retry composer update --prefer-dist $COMPOSER_OPTS
 
 before_script:
+  - git lfs pull
   - travis_retry composer update ${COMPOSER_FLAGS} --no-interaction --prefer-dist
 
 script:
