@@ -7,52 +7,12 @@ class Pasteboard
 
     public static function set($value)
     {
-        $r = false;
-        $set = proc_open(
-            "pbcopy",
-            array(
-                0 => array("pipe", "r"),
-                1 => array("pipe", "w"),
-                2 => array("pipe", "w"),
-            ),
-            $pipes
-        );
-        if (is_resource($set)) {
-            fwrite($pipes[0], $value);
-            fclose($pipes[0]);
-            $return = proc_close($set);
-            if ($return == 0) {
-                $r = true;
-            }
-        }
-
-        return $r;
+        return self::action('pbcopy', $value);
     }
 
     public static function get()
     {
-        $return = null;
-        $output = false;
-        $get = proc_open(
-            "pbpaste",
-            array(
-                0 => array("pipe", "r"),
-                1 => array("pipe", "w"),
-                2 => array("pipe", "w"),
-            ),
-            $pipes
-        );
-        if (is_resource($get)) {
-            $output = stream_get_contents($pipes[1]);
-            fclose($pipes[1]);
-            $return = proc_close($get);
-        }
-
-        if (isset($return, $output) && $return == 0 && mb_strlen($output) > 0) {
-            return $output;
-        }
-
-        return false;
+        return self::action('pbpaste');
     }
 
     public static function setArray($array, $options = array())
@@ -71,13 +31,13 @@ class Pasteboard
             $heartbeat = $options['heartbeat'];
         } else {
             $heartbeat = function ($result) use ($wait) {
-                $r = false;
+                $return = false;
                 if ($result) {
                     sleep($wait);
-                    $r = true;
+                    $return = true;
                 }
 
-                return $r;
+                return $return;
             };
         }
         $initial = null;
@@ -100,5 +60,41 @@ class Pasteboard
         }
 
         return true;
+    }
+
+    private static function action($action, $value = null)
+    {
+        $output = false;
+        $do = proc_open(
+            $action,
+            array(
+                0 => array("pipe", "r"),
+                1 => array("pipe", "w"),
+                2 => array("pipe", "w"),
+            ),
+            $pipes
+        );
+        if (is_resource($do)) {
+            switch ($action) {
+                case 'pbcopy':
+                    if (isset($value)) {
+                        fwrite($pipes[0], $value);
+                    }
+                    break;
+                case 'pbpaste':
+                    $output = stream_get_contents($pipes[1]);
+                    break;
+            }
+            foreach ($pipes as $k => $v) {
+                 fclose($pipes[$k]);
+            }
+            $status = proc_close($do);
+        }
+        if (isset($status) && $status === 0 && $output === false) {
+            $output = true;
+        } elseif (isset($status) && $status === 0 && mb_strlen($output) === 0) {
+            $output = false;
+        }
+        return $output;
     }
 }
