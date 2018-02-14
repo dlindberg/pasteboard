@@ -5,6 +5,8 @@ namespace Dlindberg\Pasteboard;
 class Pasteboard
 {
     private static $clipboard = "foo";
+    private static $process;
+    private static $pipes;
 
     public static function set($value)
     {
@@ -33,38 +35,55 @@ class Pasteboard
     private static function action($action, $value = null)
     {
         $output = false;
-        $do = proc_open(
-            $action,
+        $status = null;
+        if (self::openProcess($action)) {
+            switch ($action) {
+                case 'pbcopy':
+                    if (isset($value)) {
+                        fwrite(self::$pipes[0], $value);
+                    }
+                    break;
+                case 'pbpaste':
+                    $output = stream_get_contents(self::$pipes[1]);
+                    break;
+            }
+            $status = self::closeProcess();
+        }
+        if ($status === 0 && $output === false) {
+            $output = true;
+        } elseif ($status === 0 && mb_strlen($output) === 0) {
+            $output = false;
+        }
+
+        return $output;
+    }
+
+    private static function openProcess($process)
+    {
+        $return = false;
+        self::$process = proc_open(
+            $process,
             array(
                 0 => array("pipe", "r"),
                 1 => array("pipe", "w"),
                 2 => array("pipe", "w"),
             ),
-            $pipes
+            self::$pipes
         );
-        if (is_resource($do)) {
-            switch ($action) {
-                case 'pbcopy':
-                    if (isset($value)) {
-                        fwrite($pipes[0], $value);
-                    }
-                    break;
-                case 'pbpaste':
-                    $output = stream_get_contents($pipes[1]);
-                    break;
-            }
-            foreach ($pipes as $k => $v) {
-                fclose($pipes[$k]);
-            }
-            $status = proc_close($do);
-        }
-        if (isset($status) && $status === 0 && $output === false) {
-            $output = true;
-        } elseif (isset($status) && $status === 0 && mb_strlen($output) === 0) {
-            $output = false;
+        if (is_resource(self::$process)) {
+            $return = true;
         }
 
-        return $output;
+        return $return;
+    }
+
+    private static function closeProcess()
+    {
+        foreach (self::$pipes as $k => $v) {
+            fclose(self::$pipes[$k]);
+        }
+
+        return proc_close(self::$process);
     }
 
     private static function storedClipboard($do, $test = true)
