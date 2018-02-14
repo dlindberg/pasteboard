@@ -4,7 +4,7 @@ namespace Dlindberg\Pasteboard;
 
 class Pasteboard
 {
-    private static $clipboard = null;
+    private static $clipboard = "foo";
 
     public static function set($value)
     {
@@ -19,13 +19,13 @@ class Pasteboard
     public static function setArray($array, $options = array())
     {
         $config = self::configureArray($options);
-        self::storedClipboard('get', $config['reset']);
+        self::storedClipboard('pbpaste', $config['reset']);
         foreach ($array as $value) {
             if (!self::setArrayValue($value, $config)) {
                 return false;
             }
         }
-        self::storedClipboard('set', $config['reset']);
+        self::storedClipboard('pbcopy', $config['reset']);
 
         return true;
     }
@@ -70,42 +70,41 @@ class Pasteboard
     private static function storedClipboard($do, $test = true)
     {
         if ($test) {
-            self::action($do, self::$clipboard);
+            self::$clipboard = self::action($do, self::$clipboard);
         }
     }
 
-    private static function configureArray($initial)
+    private static function configureArray($options)
     {
-        $config = array(
-            'reset' => false,
-            'depth' => 0,
-            'wait'  => 1,
-        );
-        if (isset($initial['reset'])) {
-            $config['reset'] = $initial['reset'];
-        }
-        if (isset($initial['depth'])) {
-            $config['depth'] = $initial['depth'];
-        }
-        if (isset($initial['wait'])) {
-            $config['wait'] = $initial['wait'];
-        }
-        if (isset($initial['heartbeat'])) {
-            $config['heartbeat'] = $initial['heartbeat'];
-        } else {
-            $config['heartbeat'] = function ($result) use ($config)
-            {
-                $return = false;
-                if ($result) {
-                    sleep($config['wait']);
-                    $return = true;
-                }
-
-                return $return;
-            };
-        }
+        $config['reset'] = self::setOption('reset', false, $options);
+        $config['depth'] = self::setOption('depth', 0, $options);
+        $config['wait'] = self::setOption('wait', 1, $options);
+        $config['heartbeat'] = self::setOption('heartbeat', self::defaultHeartbeat($config['wait']), $options);
 
         return $config;
+    }
+
+    private static function defaultHeartbeat($wait)
+    {
+        return function ($result) use ($wait) {
+            $return = false;
+            if ($result) {
+                sleep($wait);
+                $return = true;
+            }
+
+            return $return;
+        };
+
+    }
+
+    private static function setOption($name, $default, $requested)
+    {
+        if (isset($requested[$name])) {
+            return $requested[$name];
+        } else {
+            return $default;
+        }
     }
 
     private static function setArrayValue($value, $config)
