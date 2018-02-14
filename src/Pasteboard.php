@@ -8,16 +8,28 @@ class Pasteboard
     private static $process;
     private static $pipes;
 
+    /**
+     * @param $value
+     * @return bool|string
+     */
     public static function set($value)
     {
         return self::action('pbcopy', $value);
     }
 
+    /**
+     * @return bool|string
+     */
     public static function get()
     {
         return self::action('pbpaste');
     }
 
+    /**
+     * @param       $array
+     * @param array $options
+     * @return bool
+     */
     public static function setArray($array, $options = array())
     {
         $config = self::configureArray($options);
@@ -32,32 +44,26 @@ class Pasteboard
         return true;
     }
 
+    /**
+     * @param      $action
+     * @param null $value
+     * @return bool|string
+     */
     private static function action($action, $value = null)
     {
         $output = false;
-        $status = null;
         if (self::openProcess($action)) {
-            switch ($action) {
-                case 'pbcopy':
-                    if (isset($value)) {
-                        fwrite(self::$pipes[0], $value);
-                    }
-                    break;
-                case 'pbpaste':
-                    $output = stream_get_contents(self::$pipes[1]);
-                    break;
-            }
-            $status = self::closeProcess();
-        }
-        if ($status === 0 && $output === false) {
-            $output = true;
-        } elseif ($status === 0 && mb_strlen($output) === 0) {
-            $output = false;
+            $output = self::doAction($action, $value);
+            self::closeProcess();
         }
 
         return $output;
     }
 
+    /**
+     * @param $process
+     * @return bool
+     */
     private static function openProcess($process)
     {
         $return = false;
@@ -77,6 +83,9 @@ class Pasteboard
         return $return;
     }
 
+    /**
+     * @return int
+     */
     private static function closeProcess()
     {
         foreach (self::$pipes as $k => $v) {
@@ -86,6 +95,35 @@ class Pasteboard
         return proc_close(self::$process);
     }
 
+    /**
+     * @param $action
+     * @param $value
+     * @return bool|string
+     */
+    private static function doAction($action, $value)
+    {
+        $output = true;
+        switch ($action) {
+            case 'pbcopy':
+                if (isset($value)) {
+                    fwrite(self::$pipes[0], $value);
+                }
+                break;
+            case 'pbpaste':
+                $output = stream_get_contents(self::$pipes[1]);
+                if (mb_strlen($output) < 1) {
+                    $output = false;
+                }
+                break;
+        }
+
+        return $output;
+    }
+
+    /**
+     * @param      $do
+     * @param bool $test
+     */
     private static function storedClipboard($do, $test = true)
     {
         if ($test) {
@@ -93,6 +131,10 @@ class Pasteboard
         }
     }
 
+    /**
+     * @param $options
+     * @return mixed
+     */
     private static function configureArray($options)
     {
         $config['reset'] = self::setOption('reset', false, $options);
@@ -103,6 +145,10 @@ class Pasteboard
         return $config;
     }
 
+    /**
+     * @param $wait
+     * @return \Closure
+     */
     private static function defaultHeartbeat($wait)
     {
         return function ($result) use ($wait) {
@@ -116,6 +162,12 @@ class Pasteboard
         };
     }
 
+    /**
+     * @param $name
+     * @param $default
+     * @param $requested
+     * @return mixed
+     */
     private static function setOption($name, $default, $requested)
     {
         if (isset($requested[$name])) {
@@ -125,6 +177,11 @@ class Pasteboard
         }
     }
 
+    /**
+     * @param $value
+     * @param $config
+     * @return bool
+     */
     private static function setArrayValue($value, $config)
     {
         if (!is_array($value)) {
