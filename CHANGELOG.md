@@ -4,6 +4,26 @@ All notable changes to `Pasteboard` will be documented in this file.
 
 Updates should follow the [Keep a CHANGELOG](http://keepachangelog.com/) principles.
 
+## [1.0.3] - 2017-02-14
+
+### Added
+- Doc Blocks
+- Changed to updated scrutinizer
+
+### Deprecated
+- Nothing
+
+### Fixed
+- Refactored private functions
+    - Improved code readability
+    
+
+### Removed
+- previous scrutinizer
+
+### Security
+- Nothing
+
 ## [1.0.2] - 2017-02-14
 
 ### Added

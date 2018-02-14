@@ -46,7 +46,7 @@ class Pasteboard
 
     /**
      * @param string $action
-     * @param null   $value
+     * @param string $value
      * @return bool|string
      */
     private static function action($action, $value = null)
@@ -135,6 +135,7 @@ class Pasteboard
      */
     private static function configureArray($options)
     {
+        $config = array();
         $config['reset'] = self::setOption('reset', false, $options);
         $config['depth'] = self::setOption('depth', 0, $options);
         $config['wait'] = self::setOption('wait', 1, $options);

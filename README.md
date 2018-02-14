@@ -5,6 +5,7 @@
 [![Build Status][ico-travis]][link-travis]
 [![Coverage Status][ico-scrutinizer]][link-scrutinizer]
 [![Quality Score][ico-code-quality]][link-code-quality]
+[![Code Intelligence Status][ico-scrutinizer-code-intelligence]][link-code-intelligence]
 [![Total Downloads][ico-downloads]][link-downloads]
 
 This is a very simple static utility class that gives access to the `pbcopy` and `pbpaste` interface on MacOS and other systems that support those shell commands. This utility is primarily useful in developing PHP command line tools. It endeavors to comply fully with PRS-1, PRS-2, and PRS-4.
@@ -103,6 +104,7 @@ The MIT License (MIT). Please see [License File](LICENSE.md) for more informatio
 [ico-scrutinizer]: https://img.shields.io/scrutinizer/coverage/g/dlindberg/pasteboard.svg?style=flat-square
 [ico-code-quality]: https://img.shields.io/scrutinizer/g/dlindberg/pasteboard.svg?style=flat-square
 [ico-downloads]: https://img.shields.io/packagist/dt/dlindberg/pasteboard.svg?style=flat-square
+[ico-scrutinizer-code-intelligence]: https://scrutinizer-ci.com/g/dlindberg/pasteboard/badges/code-intelligence.svg?b=master
 
 [link-packagist]: https://packagist.org/packages/dlindberg/pasteboard
 [link-travis]: https://travis-ci.org/dlindberg/pasteboard
@@ -110,4 +112,5 @@ The MIT License (MIT). Please see [License File](LICENSE.md) for more informatio
 [link-code-quality]: https://scrutinizer-ci.com/g/dlindberg/pasteboard
 [link-downloads]: https://packagist.org/packages/dlindberg/pasteboard
 [link-author]: https://github.com/dlindberg
+[link-code-intelligence]: https://scrutinizer-ci.com/code-intelligence
 [link-contributors]: ../../contributors
