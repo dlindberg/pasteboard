@@ -4,6 +4,7 @@ namespace Dlindberg\Pasteboard;
 
 class Pasteboard
 {
+    private static $clipboard = null;
 
     public static function set($value)
     {
@@ -18,18 +19,13 @@ class Pasteboard
     public static function setArray($array, $options = array())
     {
         $config = self::configureArray($options);
-        $initial = null;
-        if ($config['reset']) {
-            $initial = self::get();
-        }
+        self::storedClipboard('get', $config['reset']);
         foreach ($array as $value) {
-            if (!self::setArrayValue($value,$config)) {
+            if (!self::setArrayValue($value, $config)) {
                 return false;
             }
         }
-        if ($config['reset']) {
-            self::set($initial);
-        }
+        self::storedClipboard('set', $config['reset']);
 
         return true;
     }
@@ -71,6 +67,13 @@ class Pasteboard
         return $output;
     }
 
+    private static function storedClipboard($do, $test = true)
+    {
+        if ($test) {
+            self::action($do, self::$clipboard);
+        }
+    }
+
     private static function configureArray($initial)
     {
         $config = array(
@@ -90,7 +93,8 @@ class Pasteboard
         if (isset($initial['heartbeat'])) {
             $config['heartbeat'] = $initial['heartbeat'];
         } else {
-            $config['heartbeat'] = function ($result) use ($config) {
+            $config['heartbeat'] = function ($result) use ($config)
+            {
                 $return = false;
                 if ($result) {
                     sleep($config['wait']);
@@ -104,14 +108,17 @@ class Pasteboard
         return $config;
     }
 
-    private static function setArrayValue($value, $config) {
+    private static function setArrayValue($value, $config)
+    {
         if (!is_array($value)) {
             $return = $config['heartbeat'](self::set($value));
         } elseif ($config['depth'] != 0) {
-            $return = self::setArray($value, array('depth' => $config['depth'] - 1, 'heartbeat' => $config['heartbeat'],));
+            $return = self::setArray($value,
+                array('depth' => $config['depth'] - 1, 'heartbeat' => $config['heartbeat'],));
         } else {
             $return = true;
         }
+
         return $return;
     }
 }
