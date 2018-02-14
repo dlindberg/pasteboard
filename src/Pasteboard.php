@@ -95,7 +95,6 @@ class Pasteboard
 
             return $return;
         };
-
     }
 
     private static function setOption($name, $default, $requested)
@@ -112,8 +111,10 @@ class Pasteboard
         if (!is_array($value)) {
             $return = $config['heartbeat'](self::set($value));
         } elseif ($config['depth'] != 0) {
-            $return = self::setArray($value,
-                array('depth' => $config['depth'] - 1, 'heartbeat' => $config['heartbeat'],));
+            $return = self::setArray(
+                $value,
+                array('depth' => $config['depth'] - 1, 'heartbeat' => $config['heartbeat'],)
+            );
         } else {
             $return = true;
         }
