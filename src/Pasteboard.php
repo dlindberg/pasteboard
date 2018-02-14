@@ -17,45 +17,17 @@ class Pasteboard
 
     public static function setArray($array, $options = array())
     {
-        if (isset($options['depth'])) {
-            $depth = $options['depth'];
-        } else {
-            $depth = 0;
-        }
-        if (isset($options['wait'])) {
-            $wait = $options['wait'];
-        } else {
-            $wait = 1;
-        }
-        if (isset($options['heartbeat'])) {
-            $heartbeat = $options['heartbeat'];
-        } else {
-            $heartbeat = function ($result) use ($wait) {
-                $return = false;
-                if ($result) {
-                    sleep($wait);
-                    $return = true;
-                }
-
-                return $return;
-            };
-        }
+        $config = self::configureArray($options);
         $initial = null;
-        if (isset($options['reset']) && $options['reset']) {
+        if ($config['reset']) {
             $initial = self::get();
         }
         foreach ($array as $value) {
-            if (!is_array($value)) {
-                if (!$heartbeat(self::set($value))) {
-                    return false;
-                }
-            } elseif ($depth != 0) {
-                if (!self::setArray($value, array('depth' => $depth - 1, 'heartbeat' => $heartbeat,))) {
-                    return false;
-                }
+            if (!self::setArrayValue($value,$config)) {
+                return false;
             }
         }
-        if (isset($options['reset']) && $options['reset']) {
+        if ($config['reset']) {
             self::set($initial);
         }
 
@@ -86,7 +58,7 @@ class Pasteboard
                     break;
             }
             foreach ($pipes as $k => $v) {
-                 fclose($pipes[$k]);
+                fclose($pipes[$k]);
             }
             $status = proc_close($do);
         }
@@ -95,6 +67,51 @@ class Pasteboard
         } elseif (isset($status) && $status === 0 && mb_strlen($output) === 0) {
             $output = false;
         }
+
         return $output;
+    }
+
+    private static function configureArray($initial)
+    {
+        $config = array(
+            'reset' => false,
+            'depth' => 0,
+            'wait'  => 1,
+        );
+        if (isset($initial['reset'])) {
+            $config['reset'] = $initial['reset'];
+        }
+        if (isset($initial['depth'])) {
+            $config['depth'] = $initial['depth'];
+        }
+        if (isset($initial['wait'])) {
+            $config['wait'] = $initial['wait'];
+        }
+        if (isset($initial['heartbeat'])) {
+            $config['heartbeat'] = $initial['heartbeat'];
+        } else {
+            $config['heartbeat'] = function ($result) use ($config) {
+                $return = false;
+                if ($result) {
+                    sleep($config['wait']);
+                    $return = true;
+                }
+
+                return $return;
+            };
+        }
+
+        return $config;
+    }
+
+    private static function setArrayValue($value, $config) {
+        if (!is_array($value)) {
+            $return = $config['heartbeat'](self::set($value));
+        } elseif ($config['depth'] != 0) {
+            $return = self::setArray($value, array('depth' => $config['depth'] - 1, 'heartbeat' => $config['heartbeat'],));
+        } else {
+            $return = true;
+        }
+        return $return;
     }
 }
