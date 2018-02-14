@@ -105,9 +105,7 @@ class Pasteboard
         $output = true;
         switch ($action) {
             case 'pbcopy':
-                if (isset($value)) {
                     fwrite(self::$pipes[0], $value);
-                }
                 break;
             case 'pbpaste':
                 $output = stream_get_contents(self::$pipes[1]);
@@ -121,8 +119,8 @@ class Pasteboard
     }
 
     /**
-     * @param      $do
-     * @param bool $test
+     * @param string $do
+     * @param bool   $test
      */
     private static function storedClipboard($do, $test = true)
     {
@@ -163,9 +161,9 @@ class Pasteboard
     }
 
     /**
-     * @param $name
-     * @param $default
-     * @param $requested
+     * @param string $name
+     * @param        $default
+     * @param        $requested
      * @return mixed
      */
     private static function setOption($name, $default, $requested)
