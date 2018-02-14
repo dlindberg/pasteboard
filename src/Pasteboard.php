@@ -45,8 +45,8 @@ class Pasteboard
     }
 
     /**
-     * @param      $action
-     * @param null $value
+     * @param string $action
+     * @param null   $value
      * @return bool|string
      */
     private static function action($action, $value = null)
@@ -105,7 +105,7 @@ class Pasteboard
         $output = true;
         switch ($action) {
             case 'pbcopy':
-                    fwrite(self::$pipes[0], $value);
+                fwrite(self::$pipes[0], $value);
                 break;
             case 'pbpaste':
                 $output = stream_get_contents(self::$pipes[1]);
