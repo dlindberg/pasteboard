@@ -97,17 +97,17 @@ If you discover any security related issues, please email dane@lindberg.xyz inst
 
 The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
 
-[ico-version]: https://img.shields.io/packagist/v/dlindberg/Pasteboard.svg?style=flat-square
+[ico-version]: https://img.shields.io/packagist/v/dlindberg/pasteboard.svg?style=flat-square
 [ico-license]: https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square
-[ico-travis]: https://img.shields.io/travis/dlindberg/Pasteboard/master.svg?style=flat-square
-[ico-scrutinizer]: https://img.shields.io/scrutinizer/coverage/g/dlindberg/Pasteboard.svg?style=flat-square
-[ico-code-quality]: https://img.shields.io/scrutinizer/g/dlindberg/Pasteboard.svg?style=flat-square
-[ico-downloads]: https://img.shields.io/packagist/dt/dlindberg/Pasteboard.svg?style=flat-square
+[ico-travis]: https://img.shields.io/travis/dlindberg/pasteboard/master.svg?style=flat-square
+[ico-scrutinizer]: https://img.shields.io/scrutinizer/coverage/g/dlindberg/pasteboard.svg?style=flat-square
+[ico-code-quality]: https://img.shields.io/scrutinizer/g/dlindberg/pasteboard.svg?style=flat-square
+[ico-downloads]: https://img.shields.io/packagist/dt/dlindberg/pasteboard.svg?style=flat-square
 
-[link-packagist]: https://packagist.org/packages/dlindberg/Pasteboard
-[link-travis]: https://travis-ci.org/dlindberg/Pasteboard
-[link-scrutinizer]: https://scrutinizer-ci.com/g/dlindberg/Pasteboard/code-structure
-[link-code-quality]: https://scrutinizer-ci.com/g/dlindberg/Pasteboard
-[link-downloads]: https://packagist.org/packages/dlindberg/Pasteboard
+[link-packagist]: https://packagist.org/packages/dlindberg/pasteboard
+[link-travis]: https://travis-ci.org/dlindberg/pasteboard
+[link-scrutinizer]: https://scrutinizer-ci.com/g/dlindberg/pasteboard/code-structure
+[link-code-quality]: https://scrutinizer-ci.com/g/dlindberg/pasteboard
+[link-downloads]: https://packagist.org/packages/dlindberg/pasteboard
 [link-author]: https://github.com/dlindberg
 [link-contributors]: ../../contributors
